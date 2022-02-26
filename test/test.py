@@ -24,6 +24,7 @@ def test_render_map(f):
 
 # fileid, laps, points = parse_fit.get_dataframes(f)
 
-print(parse_fit.get_session_info(f))
+x = parse_fit.get_session_info(f)
+
 
 
