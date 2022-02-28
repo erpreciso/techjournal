@@ -1,8 +1,7 @@
 # my adds
+*.html
 test/
 data/
-.bak
-configs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
