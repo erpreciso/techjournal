@@ -1,8 +1,10 @@
 # my adds
 test/
 data/
-.bak
+*.bak
 configs/
+*.pkl
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -7,7 +7,7 @@ Created on Fri Feb 25 08:42:11 2022
 TODO
 
 add dependencies: https://stackoverflow.com/questions/62408719/download-dependencies-declared-in-pyproject-toml-using-pip
-logging
+
 
 """
 import sys
@@ -39,7 +39,18 @@ f = 'Move_2014_04_04_18_20_11_Running.fit'
 # webbrowser.open("mymap.html")
 
 
+PKL = "lat_lon_db.pkl"
 
+
+
+# create_pickle()
+# save_to_pickle(50, 70, 'test1')
+# save_to_pickle(40, 80, 'test2')
+
+# x = look_up(50.0, 70.0)
+# print(x)
+
+# print(get_pickle())
 
 
 
