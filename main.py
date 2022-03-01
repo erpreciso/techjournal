@@ -29,16 +29,15 @@ else:
 class Activity():
     def __init__(self):
         logging.info('Init activity')
-        self.data = pd.DataFrame({
-                                    'when': [],
-                                    'what': [],
-                                    'length': [],
-                                    'duration': [],
-                                    'timer_time': [],
-                                    'moving_time': [],
-                                    'start_latitude': [],
-                                    'start_longitude': [],
-                                    'file_name': []})
+        self.what = None
+        self.when = None
+        self.length = None
+        self.duration = None
+        self.timer_time = None
+        self.moving_time = None
+        self.file_name = None
+        self.avg_latitude = None
+        self.avg_longitude = None
     
     def create(self, data):
         pass
@@ -47,23 +46,22 @@ class Activity():
         logging.info('Creating activity from file ' + os.path.basename(file_name))
         session_info = parser.get_session_info(file_name)
         # self.when = session_info['start_time'].strftime('%A %d %B %Y %H:%M')
-        when = session_info['start_time'].strftime('%Y-%m-%d %H:%M')
-        what = session_info['sport']
-        length = h.pretty_length(meters=session_info['total_distance'])
-        duration = h.pretty_duration(s=session_info['total_elapsed_time'],
+        self.when = session_info['start_time'].strftime('%Y-%m-%d %H:%M')
+        self.what = session_info['sport']
+        self.length = h.pretty_length(meters=session_info['total_distance'])
+        self.duration = h.pretty_duration(s=session_info['total_elapsed_time'],
                                      light=True)
-        timer_time = h.pretty_duration(s=session_info['total_timer_time'],
+        self.timer_time = h.pretty_duration(s=session_info['total_timer_time'],
                                        light=True)
-        moving_time = h.pretty_duration(s=session_info['total_moving_time'],
+        self.moving_time = h.pretty_duration(s=session_info['total_moving_time'],
                                         light=True)
-        self.data = pd.DataFrame({
-                                    'when': [when],
-                                    'what': [what],
-                                    'length': [length],
-                                    'duration': [duration],
-                                    'timer_time': [timer_time],
-                                    'moving_time': [moving_time],
-                                    'file_name': [file_name]})
+        self.file_name = file_name
+        
+    def get_average_location(self):
+        logging.info('Get average location of activity')
+        laps, points = parser.get_dataframes(self.file_name)
+        self.avg_latitude = points.latitude.mean()
+        self.avg_longitude = points.longitude.mean()
 
     
     def check_in_database(self, database):
@@ -105,7 +103,9 @@ class ActivityDatabase():
                 if not self.check_activity_in_database(f):
                     session = Activity()
                     session.create_from_file(f)
-                    self.data = pd.concat([self.data, session.data],
+                    session.get_average_location()
+                    session_df = pd.DataFrame(vars(session), index=[0])
+                    self.data = pd.concat([self.data, session_df],
                                           ignore_index=True)
                 counter += 1
         self.save_to_pickle()
@@ -126,6 +126,6 @@ class ActivityDatabase():
         logging.info('Saving data to pickle')
         self.data.to_pickle(self.pickle)
 
-db = ActivityDatabase(reset=False)
+db = ActivityDatabase(reset=True)
 db.build_from_folder(config.FOLDER_NAME, n=3)
 # print(db.data.iloc[0].T)
