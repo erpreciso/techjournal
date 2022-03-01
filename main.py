@@ -15,18 +15,6 @@ import src.parser as parser
 import src.helpers as h
 import configs.config as config
 
-ACTIVITIES_PICKLE = 'activities.pkl'
-ACTIVITIES_COLUMNS = ['When',
-                      'What',
-                      'Length',
-                      'Duration',
-                      'Timer time',
-                      'Moving time',
-                      'Start latitude',
-                      'Start longitude',
-                      'File name',
-                      ]
-
 if LOG_TO_FILE:
     logging.basicConfig(filename='log.log',
                         format='%(asctime)s %(message)s',
@@ -37,110 +25,107 @@ else:
 
 
 
-def get_activity_from_file(file_name: str) -> pd.DataFrame:
-    """Parse a fit file and get activity info.
-    Returns a pd.DataFrame.
-    """
-    logging.info('working on file ' + os.path.basename(file_name))
-    session_info = parser.get_session_info(file_name)
-    # when = session_info['start_time'].strftime('%A %d %B %Y %H:%M')
-    when = session_info['start_time'].strftime('%Y-%m-%d %H:%M')
-    what = session_info['sport']
-    length = h.pretty_length(meters=session_info['total_distance'])
-    duration = h.pretty_duration(s=session_info['total_elapsed_time'],
-                                 light=True)
-    timer_time = h.pretty_duration(s=session_info['total_timer_time'],
-                                   light=True)
-    moving_time = h.pretty_duration(s=session_info['total_moving_time'],
-                                    light=True)
-    session = pd.DataFrame({'When': [when],
-                            'What': [what],
-                            'Length': [length],
-                            'Duration': [duration],
-                            'Timer time': [timer_time],
-                            'Moving time': [moving_time],
-                            'File name':[file_name],
-                            })
-    return(session)
 
-def check_if_activity_is_already_parsed(start_timestamp):
-    """Check cache if activity is already parsed."""
-    pass
+class Activity():
+    def __init__(self):
+        logging.info('Init activity')
+        self.data = pd.DataFrame({
+                                    'when': [],
+                                    'what': [],
+                                    'length': [],
+                                    'duration': [],
+                                    'timer_time': [],
+                                    'moving_time': [],
+                                    'start_latitude': [],
+                                    'start_longitude': [],
+                                    'file_name': []})
+    
+    def create(self, data):
+        pass
+    
+    def create_from_file(self, file_name: str):
+        logging.info('Creating activity from file ' + os.path.basename(file_name))
+        session_info = parser.get_session_info(file_name)
+        # self.when = session_info['start_time'].strftime('%A %d %B %Y %H:%M')
+        when = session_info['start_time'].strftime('%Y-%m-%d %H:%M')
+        what = session_info['sport']
+        length = h.pretty_length(meters=session_info['total_distance'])
+        duration = h.pretty_duration(s=session_info['total_elapsed_time'],
+                                     light=True)
+        timer_time = h.pretty_duration(s=session_info['total_timer_time'],
+                                       light=True)
+        moving_time = h.pretty_duration(s=session_info['total_moving_time'],
+                                        light=True)
+        self.data = pd.DataFrame({
+                                    'when': [when],
+                                    'what': [what],
+                                    'length': [length],
+                                    'duration': [duration],
+                                    'timer_time': [timer_time],
+                                    'moving_time': [moving_time],
+                                    'file_name': [file_name]})
 
-def save_activity(activity: pd.DataFrame) -> bool:
-    db = retrieve_activities()
-    concat = pd.concat([db, activity], ignore_index=True)
-    concat.to_pickle(ACTIVITIES_PICKLE)
-    return(True)
-
-def retrieve_activities(reset=False) -> pd.DataFrame:
-    """Return the activities database, creating one if not exist."""
-    if reset:
-        db = pd.DataFrame({}, columns=ACTIVITIES_COLUMNS)
-        db.to_pickle(ACTIVITIES_PICKLE)
-        return(db)
-    try:
-        return(pd.read_pickle(ACTIVITIES_PICKLE))
-    except(FileNotFoundError):
-        db = pd.DataFrame({}, columns=ACTIVITIES_COLUMNS)
-        db.to_pickle(ACTIVITIES_PICKLE)
-        return(db)
-
-
-def parse_folder_of_activities(folder, n=3):
-    """Iterate files in the folder, and create dataframe of results."""
-    max_files, counter = n, 0
-    directory = os.fsencode(folder)
-    logging.info('working on folder ' + config.FOLDER_NAME)
-    db = retrieve_activities()
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.endswith(".fit") and counter < max_files:
-            f = os.path.join(config.FOLDER_NAME, filename)
-            if f not in db['File name'].values:
-                session = get_activity_from_file(f)
-                save_activity(session)
-            counter += 1
-
-
-def create_activities_dataframe(n=3, log_to_file=False):
-    """Return dataframe of activities info."""
-
-    df = pd.DataFrame(columns=['When', 'What'])
-    max_files, counter = n, 0
-    directory = os.fsencode(config.FOLDER_NAME)
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.endswith(".fit") and counter < max_files:
-            logging.info('working on file ' + filename)
-            f = os.path.join(config.FOLDER_NAME, filename)
-            session_info = parser.get_session_info(f)
-            # when = session_info['start_time'].strftime('%A %d %B %Y %H:%M')
-            when = session_info['start_time'].strftime('%Y-%m-%d %H:%M')
-            what = session_info['sport']
-            length = h.pretty_length(meters=session_info['total_distance'])
-            duration = h.pretty_duration(s=session_info['total_elapsed_time'],
-                                         light=True)
-            timer_time = h.pretty_duration(s=session_info['total_timer_time'],
-                                           light=True)
-            moving_time = h.pretty_duration(s=session_info['total_moving_time'],
-                                            light=True)
-            
-            session = pd.DataFrame({'When': [when],
-                                    'What': [what],
-                                    'Length': [length],
-                                    'Duration': [duration],
-                                    'Timer time': [timer_time],
-                                    'Moving time': [moving_time],
-                                    })
-            df = pd.concat([df, session], ignore_index=True)
-            counter += 1
-            continue
+    
+    def check_in_database(self, database):
+        pass
+    
+    def save(self, database):
+        pass
+    
+    
+    
+class ActivityDatabase():
+    def __init__(self, pickle='activities.pkl', reset=False):
+        """Initialize the database."""
+        self.pickle = pickle
+        self.data = pd.DataFrame()
+        self.retrieve_from_pickle(reset)
+    
+    def check_activity_in_database(self, file_name: str):
+        logging.info('Checking activity in database: filename ' + file_name)
+        if self.data.empty:
+            logging.info('self.data is empty')
+            return(False)
         else:
-            continue
-    return(df)
+            logging.info('self.data is not empty. Checking if filename present')
+            result = file_name in self.data.file_name.values
+            logging.info('Filename present: ' + str(result))
+            return(result)
+        
+    
+    def build_from_folder(self, folder, n=3):
+        """Iterate files in the folder, and create dataframe of results."""
+        max_files, counter = n, 0
+        directory = os.fsencode(folder)
+        logging.info('Building database from folder ' + folder)
+        for file in os.listdir(directory):
+            filename = os.fsdecode(file)
+            if filename.endswith(".fit") and counter < max_files:
+                f = os.path.join(folder, filename)
+                if not self.check_activity_in_database(f):
+                    session = Activity()
+                    session.create_from_file(f)
+                    self.data = pd.concat([self.data, session.data],
+                                          ignore_index=True)
+                counter += 1
+        self.save_to_pickle()
+    
+    def retrieve_from_pickle(self, reset=False):
+        if reset:
+            logging.info('Resetting pickle')
+            self.data.to_pickle(self.pickle)
+        else:
+            try:
+                logging.info('Retrieving from pickle')
+                self.data = pd.read_pickle(self.pickle)
+            except(FileNotFoundError):
+                logging.info('Pickle not found. Writing pickle with empty dataframe')
+                self.data.to_pickle(self.pickle)
 
-parse_folder_of_activities(config.FOLDER_NAME, n=3)
-x = retrieve_activities()
-print(x)
+    def save_to_pickle(self):
+        logging.info('Saving data to pickle')
+        self.data.to_pickle(self.pickle)
 
+db = ActivityDatabase(reset=False)
+db.build_from_folder(config.FOLDER_NAME, n=3)
+# print(db.data.iloc[0].T)
