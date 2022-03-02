@@ -41,16 +41,23 @@ f = 'Move_2014_04_04_18_20_11_Running.fit'
 
 PKL = "lat_lon_db.pkl"
 
+def Waiting_fun():                      #1 line number one
+    for i in range(100):                #2
+        pass                            #3
+                                        #4 
+def New_sum(lista, to_s = False):       #5
+    result = 0                          #6
+    print(1)                            #7
+    for i in lista:                     #8
+        print("summed")                  #9   
+        result +=i                      #10
+    Waiting_fun()                       #11
+    if to_s:                            #12
+        result = str(result)
+    return result
 
-
-# create_pickle()
-# save_to_pickle(50, 70, 'test1')
-# save_to_pickle(40, 80, 'test2')
-
-# x = look_up(50.0, 70.0)
-# print(x)
-
-# print(get_pickle())
-
-
-
+a = New_sum([1,4,5,7,8])
+b = New_sum([1,4],1)
+c = 456
+d = New_sum([6,8,9],1)
+final_result = a*b*c*d
