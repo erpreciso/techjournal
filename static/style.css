@@ -1,0 +1,30 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Mar  2 10:11:38 2022
+
+@author: c740
+"""
+
+body            { font-family: "Lucida Sans Unicode", "Georgia", sans-serif;}
+a, h1, h2       { color: #377ba8; }
+h1, h2          { margin: 0; }
+h1              { border-bottom: 2px solid #eee; }
+h2              { font-size: 1.2em; }
+
+table.dataframe, .dataframe th, .dataframe td {
+  border: none;
+  border-bottom: 1px solid #C8C8C8;
+  border-collapse: collapse;
+  text-align:left;
+  padding: 10px;
+  margin-bottom: 40px;
+  font-size: 0.9em;
+  background-color: #00008B;
+  color: white;
+}
+
+
+tr:nth-child(odd)		{ background-color:#eee; }
+tr:nth-child(even)	{ background-color:#fff; }
+
+tr:hover            { background-color: #ffff99;}

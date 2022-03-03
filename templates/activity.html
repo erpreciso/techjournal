@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <title>Activity</title>
+    {% endblock %}
+</head>
+<body>
+    <h1>Activity</h1>
+    {% include map_template %}
+    <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2022 by me.
+        {% endblock %}
+    </div>
+</body>
+</html>

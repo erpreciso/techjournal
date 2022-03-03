@@ -9,8 +9,10 @@ from: https://towardsdatascience.com/build-interactive-gps-activity-maps-from-gp
 
 import folium
 import pandas
+import logging
 
 def extract_list_of_tuples(points:pandas.DataFrame) -> list():
+    logging.info('Extract list of tuples')
     route = []
     for idx, row in points.iterrows():
         route.append(tuple([row.latitude, row.longitude]))
@@ -42,4 +44,5 @@ def create_map_with_track(points:pandas.DataFrame) -> folium.Map():
                     color='red',
                     weight=4.5,
                     opacity=.5).add_to(mymap)
+    logging.info('Map created')
     return(mymap)

@@ -4,6 +4,7 @@ data/
 *.bak
 configs/
 *.pkl
+templates/maps/
 
 
 # Byte-compiled / optimized / DLL files

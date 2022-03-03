@@ -39,25 +39,16 @@ f = 'Move_2014_04_04_18_20_11_Running.fit'
 # webbrowser.open("mymap.html")
 
 
-PKL = "lat_lon_db.pkl"
 
-def Waiting_fun():                      #1 line number one
-    for i in range(100):                #2
-        pass                            #3
-                                        #4 
-def New_sum(lista, to_s = False):       #5
-    result = 0                          #6
-    print(1)                            #7
-    for i in lista:                     #8
-        print("summed")                  #9   
-        result +=i                      #10
-    Waiting_fun()                       #11
-    if to_s:                            #12
-        result = str(result)
-    return result
+# import src.activity as activity
+# import configs.config as config
 
-a = New_sum([1,4,5,7,8])
-b = New_sum([1,4],1)
-c = 456
-d = New_sum([6,8,9],1)
-final_result = a*b*c*d
+# db = activity.ActivityDatabase(reset=False)
+# db.build_from_folder(config.FOLDER_NAME, n=5)
+
+import geopandas
+
+f = '../data/planet_8.16,45.32_9.741,46.051.osm.geojson.xz'
+gdf = geopandas.read_file(f)
+
+gdf

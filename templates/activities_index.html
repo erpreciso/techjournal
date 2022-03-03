@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <title>Activities</title>
+    {% endblock %}
+</head>
+<body>
+    <h1>Activities</h1>
+    {{ table|safe }}
+    <h3>Add/Refresh activities<h3/>
+    <form method="post" action="/">
+        <input type="submit" value="VALUE1" name="action1"/>
+        <input type="submit" value="VALUE2" name="action2" />
+    </form>
+    <div id="footer">
+        {% block footer %}
+        &copy; Copyright 2022 by me.
+        {% endblock %}
+    </div>
+</body>
+</html>
