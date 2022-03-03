@@ -17,8 +17,22 @@ import os
 # import parse_fit
 # import render_track
 
-folder_name = 'C:\\dev\\techjournal\\data'
-f = 'Move_2014_04_04_18_20_11_Running.fit'
+folder_name = 'C:\\dev\\techjournal\\data\\pics'
+
+from PIL import Image
+
+size = (256, 256)
+
+for infile in os.listdir(folder_name):
+    outfile = os.path.splitext(infile)[0] + ".thumbnail"
+    if infile != outfile:
+        try:
+            with Image.open(infile) as im:
+                print(infile, im.format, f"{im.size}x{im.mode}")
+                im.thumbnail(size)
+                im.save(outfile, "JPEG")
+        except OSError:
+            print("cannot create thumbnail for", infile)
 
 # def test_render_map(f):
 #     laps, points = parse_fit.get_dataframes(f)
@@ -46,9 +60,7 @@ f = 'Move_2014_04_04_18_20_11_Running.fit'
 # db = activity.ActivityDatabase(reset=False)
 # db.build_from_folder(config.FOLDER_NAME, n=5)
 
-import geopandas
+# import geopandas
 
-f = '../data/planet_8.16,45.32_9.741,46.051.osm.geojson.xz'
-gdf = geopandas.read_file(f)
-
-gdf
+# f = '../data/planet_8.16,45.32_9.741,46.051.osm.geojson.xz'
+# 

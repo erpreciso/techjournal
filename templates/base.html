@@ -3,11 +3,25 @@
 <head>
     {% block head %}
     <link rel="stylesheet" href="style.css" />
-    <title>{% block title %}{% endblock %} - My Webpage</title>
+    <title>Homepage</title>
     {% endblock %}
 </head>
 <body>
     <div id="content">{% block content %}{% endblock %}</div>
+    <table>
+        <tr>
+            <td>
+            <h1>My data</h1>
+            <a href="{{ url_for('activities_index') }}">Activities</a>
+            </td>
+            <td>
+            <h1>My favourites</h1>
+            {% for link in links %}
+            <p><a href="{{ link[1] }}">{{ link[0] }}</a></p>
+            {% endfor %}
+            </td>
+        </tr>
+    </table>
     <div id="footer">
         {% block footer %}
         &copy; Copyright 2008 by <a href="http://domain.invalid/">you</a>.

@@ -21,7 +21,12 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
+def index():
+    return(render_template('base.html',
+           links=config.LINKS))
+
+@app.route('/activities', methods=['GET', 'POST'])
 def activities_index():
     db = activity.ActivityDatabase(reset=False)
     db.build_from_folder(config.FOLDER_NAME, n=2)
