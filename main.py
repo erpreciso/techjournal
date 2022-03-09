@@ -29,7 +29,7 @@ def index():
 @app.route('/activities', methods=['GET', 'POST'])
 def activities_index():
     db = activity.ActivityDatabase(reset=False)
-    db.build_from_folder(config.FOLDER_NAME, n=2)
+    db.build_from_folder(config.FOLDER_NAME, n=100)
     db.data['link'] = ['http://localhost:5000/' + str(i) for i in db.data.index]
     df = db.data[['link',
                   'what',
@@ -59,7 +59,7 @@ def show_track(track_id):
     # create activity summary table
     logging.info('Building database')
     db = activity.ActivityDatabase(reset=False)
-    db.build_from_folder(config.FOLDER_NAME, n=3)
+    db.build_from_folder(config.FOLDER_NAME, n=100)
     logging.info('Creating activity points for trackID: ' + str(track_id))
     activity_points = db.points[db.points['id'] == track_id]
     logging.info('Creating map for trackID: ' + str(track_id))

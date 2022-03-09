@@ -14,53 +14,48 @@ import sys
 import os
 
 # sys.path.append('../src')
-# import parse_fit
+# import src.parser as parser
 # import render_track
 
-folder_name = 'C:\\dev\\techjournal\\data\\pics'
 
-from PIL import Image
-
-size = (256, 256)
-
-for infile in os.listdir(folder_name):
-    outfile = os.path.splitext(infile)[0] + ".thumbnail"
-    if infile != outfile:
-        try:
-            with Image.open(infile) as im:
-                print(infile, im.format, f"{im.size}x{im.mode}")
-                im.thumbnail(size)
-                im.save(outfile, "JPEG")
-        except OSError:
-            print("cannot create thumbnail for", infile)
-
-# def test_render_map(f):
-#     laps, points = parse_fit.get_dataframes(f)
-#     import webbrowser
-#     mymap = render_track.create_map_with_track(points)
-#     mymap.save("mymap.html")
-#     webbrowser.open("mymap.html")
-
-# test_render_map(f)
-
-# fileid, laps, points = parse_fit.get_dataframes(f)
-
-# x = parse_fit.get_session_info(f)
-
-# laps, points = parse_fit.get_dataframes(f)
-# mymap = render_track.create_map_with_track(points)
-# mymap.save("mymap.html")
-# webbrowser.open("mymap.html")
+#%% Images
 
 
+# from PIL import Image
 
-# import src.activity as activity
-# import configs.config as config
+# size = (256, 256)
 
-# db = activity.ActivityDatabase(reset=False)
-# db.build_from_folder(config.FOLDER_NAME, n=5)
+# for infile in os.listdir(folder_name):
+#     outfile = os.path.splitext(infile)[0] + ".thumbnail"
+#     if infile != outfile:
+#         try:
+#             with Image.open(infile) as im:
+#                 pass
+#                 # print(infile, im.format, f"{im.size}x{im.mode}")
+#                 # im.thumbnail(size)
+#                 # im.save(outfile, "JPEG")
+#         except OSError:
+#             pass
+#             # print("cannot create thumbnail for", infile)
+#%%
 
-# import geopandas
+folder_name = 'C:\\dev\\techjournal\\data'
+file_name = '911320533.tcx'
+from pathlib import Path
 
-# f = '../data/planet_8.16,45.32_9.741,46.051.osm.geojson.xz'
-# 
+f = Path(os.path.join(folder_name, file_name))
+# fp = tempfile.TemporaryFile()
+
+
+print(f.suffixes)
+
+
+    
+# fp.write(file_content)
+# l, p = parser.get_tcx_dataframes(xml[10:])
+
+# nsmap = {}
+# for ns in doc.xpath('//namespace::*'):
+#     if ns[0]: # Removes the None namespace, neither needed nor supported.
+#         nsmap[ns[0]] = ns[1]
+# doc.xpath('//prefix:element', namespaces=nsmap)
