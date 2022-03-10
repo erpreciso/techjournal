@@ -4,6 +4,7 @@ data/
 *.bak
 configs/
 *.pkl
+*.pickle
 templates/maps/
 
 

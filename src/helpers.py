@@ -7,26 +7,12 @@ Created on Mon Feb 28 07:36:17 2022
 
 import datetime as dt
 import pandas as pd
+import math
 
-def look_up(lat, lon):
-    search = pd.DataFrame({'lat': [lat], 'Lon': [lon]})
-    res = pd.merge(search, get_pickle())['Result']
-    if not res.empty:
-        return(res[0])
-    return(None)
 
-def get_pickle(pickle_file):
-    return(pd.read_pickle(pickle_file))
-
-def save_to_pickle(pickle_file, lat, lon, result):
-    to_save = pd.DataFrame({'lat': [lat], 'Lon': [lon], 'Result': [result]})
-    pd.concat([to_save, get_pickle()], ignore_index=True).to_pickle(pickle_file)
-    
-
-def create_pickle(pickle_file):
-    pd.DataFrame({'lat': [], 'Lon': [], 'Result': []}).to_pickle(pickle_file)
-
-def pretty_duration(s, fmt='{}h:{}m:{}s', light=False) -> str:
+def pretty_duration(s: float, fmt='{}h:{}m:{}s', light=False) -> str:
+    if math.isnan(s):
+        return('Not a number')
     turnaround = dt.timedelta(seconds=s)
     total_seconds = int(turnaround.total_seconds())
     hours, remainder = divmod(total_seconds,60*60)
@@ -45,9 +31,3 @@ def get_location_description(lat, lon) -> str:
     geolocator = Nominatim(user_agent="app")
     location = geolocator.reverse([lat, lon])
     return(location)
-
-# x = get_location_description(52.509669, 13.376294)
-# x = get_location_description(52.50, 13.37)
-
-
-# print(x)
