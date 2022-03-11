@@ -20,11 +20,8 @@ import os
 import pandas as pd
 import logging
 from pathlib import Path
-import parse_activity_file
-
-
-# import src.parser as parser
-import helpers as h
+import src.parse_activity_file as parse_activity_file
+import src.helpers as h
 
 if LOG_TO_FILE:
     logging.basicConfig(filename='log.log',
@@ -103,6 +100,9 @@ class Activity():
         seconds = self.activity['total_elapsed_time'].values[0]
         return(h.pretty_duration(s=seconds, light=True))
     
+    def remove_empty_points(self):
+        self.points = self.points[self.points['latitude'] > 0]
+    
 class Activities():
     def __init__(self, reset=False):
         """Initialize the database.
@@ -116,9 +116,9 @@ class Activities():
         self.activities = pd.DataFrame()
         self.laps = pd.DataFrame()
         self.points = pd.DataFrame()
-        self.pickles = {'laps': '../laps.pickle',
-                        'points': '../points.pickle',
-                        'activities': '../activities.pikle'}
+        self.pickles = {'laps': Path('.')/'pickles'/'laps.pickle',
+                        'points': Path('.')/'pickles'/'points.pickle',
+                        'activities': Path('.')/'pickles'/'activities.pikle'}
         if reset:
             self.save_to_pickle()
         else:
@@ -175,7 +175,7 @@ class Activities():
                     session = Activity()
                     session.define_source_file(file_path)
                     session.create_from_file()
-                    # session_activity_df = session.get_summary()
+                    session.remove_empty_points()
                     self.activities = pd.concat([self.activities,
                                                  session.activity],
                                           # ignore_index=True,
@@ -190,11 +190,11 @@ class Activities():
         self.save_to_pickle()
     
     
-folder_name = 'C:\\dev\\techjournal\\data'
+# folder_name = 'C:\\dev\\techjournal\\data'
 # file_name = '911320533.tcx.gz'
 # file_name = '1049737836.gpx.gz'
-file_name = 'Move_2014_04_04_18_20_11_Running.fit'
-f = Path(os.path.join(folder_name, file_name))
+# file_name = 'Move_2014_04_04_18_20_11_Running.fit'
+# f = Path(os.path.join(folder_name, file_name))
 
 
 # a = Activity()
@@ -205,6 +205,6 @@ f = Path(os.path.join(folder_name, file_name))
 # print(a.get_sport())
 # print(a.get_total_elapsed_time())
 
-db = Activities()
-db.load_from_pickle()
-db.build_from_folder(folder_name, n=3)
+# db = Activities()
+# db.load_from_pickle()
+# db.build_from_folder(folder_name, n=100)

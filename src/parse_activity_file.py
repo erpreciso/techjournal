@@ -15,9 +15,10 @@ https://github.com/polyvertex/fitdecode
 https://github.com/bunburya/fitness_tracker_data_parsing/blob/main/parse_fit.py
 """
 
-import parse_fit, parse_tcx, parse_gpx
+import src.parse_fit as parse_fit
+import src.parse_tcx as parse_tcx
+import src.parse_gpx as parse_gpx
 import pandas as pd
-import os.path
 from pathlib import Path
 import gzip
 

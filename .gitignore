@@ -1,6 +1,7 @@
 # my adds
 test/
 data/
+pickles/
 *.bak
 configs/
 *.pkl

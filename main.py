@@ -28,15 +28,17 @@ def index():
 
 @app.route('/activities', methods=['GET', 'POST'])
 def activities_index():
-    db = activity.ActivityDatabase(reset=False)
-    db.build_from_folder(config.FOLDER_NAME, n=100)
-    db.data['link'] = ['http://localhost:5000/' + str(i) for i in db.data.index]
-    df = db.data[['link',
-                  'what',
-                  'when',
-                  'length',
-                  'duration',
-                  'short_file_name',
+    # TODO add an index on the left
+    db = activity.Activities(reset=False)
+    db.load_from_pickle()
+    db.build_from_folder(config.FOLDER_NAME, n=10)
+    db.activities['link'] = ['http://localhost:5000/' + str(i) for i in db.activities['activity_id']]
+    df = db.activities[['link',
+                  'sport',
+                  'start_time',
+                  'total_distance',
+                  'total_elapsed_time',
+                  'source_file_name',
                   'avg_latitude',
                   'avg_longitude']]
     if request.method == 'POST':
@@ -58,10 +60,11 @@ def activities_index():
 def show_track(track_id):
     # create activity summary table
     logging.info('Building database')
-    db = activity.ActivityDatabase(reset=False)
-    db.build_from_folder(config.FOLDER_NAME, n=100)
+    db = activity.Activities(reset=False)
+    db.load_from_pickle()
+    db.build_from_folder(config.FOLDER_NAME, n=10)
     logging.info('Creating activity points for trackID: ' + str(track_id))
-    activity_points = db.points[db.points['id'] == track_id]
+    activity_points = db.points[db.points['activity_id'] == track_id]
     logging.info('Creating map for trackID: ' + str(track_id))
     activity_map = track.create_map_with_track(activity_points)
     map_html = 'maps/' + str(track_id) + '_map.html'
